@@ -97,15 +97,14 @@ def update_password():
     reset_token = request.form.get('reset_token')
     new_password = request.form.get('new_password')
     user = AUTH._db._session.query(User).filter_by(email=email).first()
-    try:
-        if user:
-            if user.reset_token == reset_token:
-                user.hashed_password = _hash_password(new_password)
-                AUTH._db._session.commit()
+    if user:
+        if user.reset_token == reset_token:
+            user.hashed_password = _hash_password(new_password)
+            AUTH._db._session.commit()
             return jsonify(
                 {"email": f"{user.email}", "message": "Password updated"})
-    except ValueError:
-        abort(403)
+        else:
+            abort(403)
 
 
 if __name__ == "__main__":
