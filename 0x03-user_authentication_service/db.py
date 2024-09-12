@@ -58,7 +58,6 @@ class DB:
         """update user by its matched id"""
         user = self._session.query(User).filter_by(id=id).first()
         # print(user.__dict__)
-
         for key, value in kwargs.items():
             if user.__dict__.get(key):
                 user.__dict__[key] = value
