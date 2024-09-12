@@ -90,7 +90,7 @@ def get_reset_password_token():
             abort(403)
 
 
-@app.route('/update_password', methods=['PUT'])
+@app.route('/reset_password', methods=['PUT'])
 def update_password():
     """update password from form data tested using curl -d, not url args"""
     email = request.form.get('email')
