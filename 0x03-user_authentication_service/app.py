@@ -102,7 +102,7 @@ def update_password():
             user.hashed_password = _hash_password(new_password)
             AUTH._db._session.commit()
             return jsonify(
-                {"email": f"{user.email}", "message": "Password updated"})
+                {"email": f"{user.email}", "message": "Password updated"}), 200
         else:
             abort(403)
 
