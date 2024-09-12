@@ -86,7 +86,7 @@ def get_reset_password_token():
             AUTH._db._session.commit()
             return jsonify({"email": f"{user.email}",
                             "reset_token": f"{user.reset_token}"}), 200
-        except:
+        except ValueError:
             abort(403)
 
 
