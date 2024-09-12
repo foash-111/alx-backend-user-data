@@ -35,10 +35,11 @@ class DB:
 
     def add_user(self, email="", hashed_password=""):
         """add new user from User class and store it"""
-        new_user = User(email=email, hashed_password=hashed_password)
-        self._session.add(new_user)
-        self._session.commit()
-        return new_user
+        if email and hashed_password:
+            new_user = User(email=email, hashed_password=hashed_password)
+            self._session.add(new_user)
+            self._session.commit()
+            return new_user
 
     def find_user_by(self, email="", **kwargs):
         """query the first matched email"""
