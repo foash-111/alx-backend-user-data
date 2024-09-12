@@ -100,6 +100,7 @@ def update_password():
     if user:
         if user.reset_token == reset_token:
             user.hashed_password = _hash_password(new_password)
+            user.reset_token = None
             AUTH._db._session.commit()
             return jsonify(
                 {"email": f"{user.email}", "message": "Password updated"}), 200
