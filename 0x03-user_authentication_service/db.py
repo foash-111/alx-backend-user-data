@@ -40,10 +40,10 @@ class DB:
             self._session.add(new_user)
             self._session.commit()
             return new_user
+        return None
 
     def find_user_by(self, email="", **kwargs):
         """query the first matched email"""
-
         if email:
             current_user = self._session.query(User).\
                 filter_by(email=email).first()
@@ -62,3 +62,4 @@ class DB:
         for key, value in kwargs.items():
             if user.__dict__.get(key):
                 user.__dict__[key] = value
+        self._session.commit()
