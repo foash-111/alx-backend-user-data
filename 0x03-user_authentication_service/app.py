@@ -81,12 +81,13 @@ def get_reset_password_token():
     email = request.form.get('email')
     user = AUTH._db._session.query(User).filter_by(email=email).first()
     if email:
-        user.reset_token = AUTH.get_reset_password_token(email=email)
-        AUTH._db._session.commit()
-        return jsonify({"email": f"{user.email}",
-                        "reset_token": f"{user.reset_token}"}), 200
-    else:
-        abort(403)
+        try:
+            user.reset_token = AUTH.get_reset_password_token(email=email)
+            AUTH._db._session.commit()
+            return jsonify({"email": f"{user.email}",
+                            "reset_token": f"{user.reset_token}"}), 200
+        except:
+            abort(403)
 
 
 @app.route('/update_password', methods=['PUT'])
