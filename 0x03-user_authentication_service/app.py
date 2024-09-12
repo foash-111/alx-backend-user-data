@@ -102,12 +102,10 @@ def update_password():
             if user.reset_token == reset_token:
                 user.hashed_password = _hash_password(new_password)
                 AUTH._db._session.commit()
-            else:
-                abort(403)
             return jsonify(
                 {"email": f"{user.email}", "message": "Password updated"})
-    except ValueError as e:
-        print(e)
+    except ValueError:
+        abort(403)
 
 
 if __name__ == "__main__":
