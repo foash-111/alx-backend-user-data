@@ -2,7 +2,7 @@
 """
 hashing password file
 """
-from bcrypt import hashpw, gensalt, checkpw
+import bcrypt
 from db import DB
 from user import User
 from uuid import uuid4
@@ -29,7 +29,7 @@ class Auth:
         current_user = self._db._session.query(User).\
             filter_by(email=email).first()
         if current_user:
-            if checkpw(password.encode(), current_user.hashed_password):
+            if bcrypt.checkpw(password.encode(), current_user.hashed_password):
                 return True
             return False
         return False
@@ -88,9 +88,9 @@ def _hash_password(str=""):
     b'str'
     """
     str = str.encode()  # to transform it into bytes
-    salt = gensalt()  # (add randomness to the hash)
+    salt = bcrypt.gensalt()  # (add randomness to the hash)
 
-    return hashpw(str, salt)
+    return bcrypt.hashpw(str, salt)
 
 
 def _generate_uuid():
