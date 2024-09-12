@@ -40,23 +40,22 @@ class DB:
             self._session.add(new_user)
             self._session.commit()
             return new_user
-        return None
 
-    def find_user_by(self, email="", **kwargs):
+    def find_user_by(self, **kwargs):
         """query the first matched email"""
-        if email:
+        try:
             current_user = self._session.query(User).\
-                filter_by(email=email).first()
+                filter_by(**kwargs).first()
             if current_user:
                 return current_user
             else:
                 raise NoResultFound
-        else:
+        except InvalidRequestError:
             raise InvalidRequestError
 
-    def update_user(self, id=0, email="", hashed_password="", **kwargs):
+    def update_user(self, id=0, **kwargs):
         """update user by its matched id"""
-        user = self._session.query(User).filter_by(id=id).first()
+        user = self.find_user_by(id=id)
         # print(user.__dict__)
         for key, value in kwargs.items():
             if user.__dict__.get(key):
