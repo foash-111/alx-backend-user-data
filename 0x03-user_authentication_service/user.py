@@ -1,4 +1,4 @@
-#!/user/bin/env python3
+#!/usr/bin/env python3
 """our BASE USER model
 our table schema representaion in database
 """
