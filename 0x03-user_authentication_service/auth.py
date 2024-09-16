@@ -82,15 +82,15 @@ class Auth:
             raise ValueError
 
 
-def _hash_password(Password: str = "") -> bytes:
+def _hash_password(password: str = "") -> bytes:
     """
     >>> 'str'.encode()
     b'str'
     """
-    Password = Password.encode()  # to transform it into bytes
+    password = password.encode()  # to transform it into bytes
     salt = bcrypt.gensalt()  # (add randomness to the hash)
 
-    return bcrypt.hashpw(Password, salt)
+    return bcrypt.hashpw(password, salt)
 
 
 def _generate_uuid():
