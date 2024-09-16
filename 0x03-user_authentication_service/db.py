@@ -54,11 +54,19 @@ class DB:
                     raise NoResultFound
             raise InvalidRequestError
 
-    def update_user(self, id=0, **kwargs):
+    def update_user(self, id=0, **kwargs) -> None:
         """update user by its matched id"""
-        user = self.find_user_by(id=id)
-        # print(user.__dict__)
-        for key, value in kwargs.items():
-            if user.__dict__.get(key):
-                user.__dict__[key] = value
-        self._session.commit()
+        try:
+            user = self.find_user_by(id=id)
+            # print(user.__dict__)
+            for key, value in kwargs.items():
+                # if user.__dict__.get(key):
+                #     user.__dict__[key] = value
+                if hasattr(user, key):
+                    setattr(user, key, value)
+            self._session.commit()
+            return None
+        except NoResultFound:
+            raise ValueError
+        except InvalidRequestError:
+            raise ValueError
