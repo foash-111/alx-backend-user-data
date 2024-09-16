@@ -8,6 +8,7 @@ from user import User
 from uuid import uuid4
 from sqlalchemy.orm.exc import NoResultFound
 
+
 class Auth:
     """Auth class to interact with the authentication database.
     """
@@ -25,8 +26,7 @@ class Auth:
             return new_user
 
     def valid_login(self, email="", password=""):
-        current_user = self._db._session.query(User).\
-            filter_by(email=email).first()
+        current_user = self._db.find_user_by(email=email)
         if current_user:
             if bcrypt.checkpw(password.encode(), current_user.hashed_password):
                 return True
@@ -35,7 +35,7 @@ class Auth:
 
     def create_session(self, email=""):
         """create session to the corresponding User or None"""
-        current = self._db._session.query(User).filter_by(email=email).first()
+        current = self._db.find_user_by(email=email)
         if current:
             current.session_id = _generate_uuid()
             self._db._session.commit()
@@ -45,15 +45,14 @@ class Auth:
     def get_user_from_session_id(self, session_id=""):
         """returns the corresponding User or None"""
         if session_id:
-            cur_user = self._db._session.query(User).\
-                filter_by(session_id=session_id).first()
+            cur_user = self._db.find_user_by(session_id=session_id)
             if cur_user:
                 return cur_user
             return None
         return None
 
     def destroy_session(self, user_id=0):
-        cur_user = self._db._session.query(User).filter_by(id=user_id).first()
+        cur_user = self._db.find_user_by(id=user_id)
         cur_user.session_id = None
         self._db._session.commit()
         return None
@@ -61,7 +60,7 @@ class Auth:
     def get_reset_password_token(self, email=""):
         """get_reset_password_token"""
         if email:
-            user = self._db._session.query(User).filter_by(email=email).first()
+            user = self._db.find_user_by(email=email)
             if user:
                 user.reset_token = _generate_uuid()
                 self._db._session.commit()
@@ -70,8 +69,7 @@ class Auth:
                 raise ValueError
 
     def update_password(self, reset_token="", password=""):
-        user = self._db._session.query(User).\
-            filter_by(reset_token=reset_token).first()
+        user = self._db.find_user_by(reset_token=reset_token)
         if user:
             user.hashed_password = _hash_password(password)
             user.reset_token = None
