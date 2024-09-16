@@ -8,7 +8,6 @@ from user import User
 from uuid import uuid4
 from sqlalchemy.orm.exc import NoResultFound
 
-
 class Auth:
     """Auth class to interact with the authentication database.
     """
@@ -17,14 +16,13 @@ class Auth:
 
     def register_user(self, email: str = "", password: str = "") -> User:
         """store user with hashed password"""
-
         try:
             self._db.find_user_by(email=email)
-        except NoResultFound:
             raise ValueError(f"User {email} already exists")
-        password = _hash_password(password)
-        new_user = self._db.add_user(email, password)
-        return new_user
+        except NoResultFound:
+            password = _hash_password(password)
+            new_user = self._db.add_user(email, password)
+            return new_user
 
     def valid_login(self, email="", password=""):
         current_user = self._db._session.query(User).\
