@@ -14,6 +14,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def home():
+    """home end point"""
     return jsonify({"message": "Bienvenue"})
 
 
