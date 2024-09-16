@@ -6,7 +6,7 @@ my base flask module
 from flask import Flask, jsonify, request, abort, redirect, url_for
 from auth import Auth, _hash_password
 from user import User
-
+from sqlalchemy.exc import NoResultFound
 
 AUTH = Auth()
 app = Flask(__name__)
@@ -53,11 +53,11 @@ def logout():
     """
     session_id = request.cookies.get('session_id')
     if session_id:
-        user = AUTH._db.find_user_by(session_id=session_id)
-        if user:
+        try:
+            user = AUTH._db.find_user_by(session_id=session_id)
             AUTH.destroy_session(user_id=user.id)
             return redirect(url_for('home'))
-        else:
+        except NoResultFound:
             abort(403)
     else:
         abort(403)
@@ -68,10 +68,11 @@ def profile():
     """get user profile if session_id exists"""
     session_id = request.cookies.get('session_id')
     if session_id:
-        user = AUTH.get_user_from_session_id(session_id)
-        if user:
+        try:
+            user = AUTH._db.find_user_by(session_id=session_id)
             return jsonify({"email": f"{user.email}"})
-        abort(403)
+        except NoResultFound:
+            abort(403)
     abort(403)
 
 
