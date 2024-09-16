@@ -55,6 +55,7 @@ class Auth:
         return None
 
     def destroy_session(self, user_id=0):
+        """destroy_session"""
         cur_user = self._db.find_user_by(id=user_id)
         cur_user.session_id = None
         self._db.update_user(user_id=cur_user.id)
@@ -72,6 +73,7 @@ class Auth:
                 raise ValueError
 
     def update_password(self, reset_token="", password=""):
+        """update_password"""
         user = self._db.find_user_by(reset_token=reset_token)
         if user:
             user.hashed_password = _hash_password(password)
