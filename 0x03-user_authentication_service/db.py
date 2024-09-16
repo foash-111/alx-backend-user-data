@@ -42,7 +42,7 @@ class DB:
             return new_user
         return None
 
-    def find_user_by(self, **kwargs):
+    def find_user_by(self, **kwargs) -> User:
         """query the first matched email"""
         for key, value in kwargs.items():
             if User.__dict__.get(key):
