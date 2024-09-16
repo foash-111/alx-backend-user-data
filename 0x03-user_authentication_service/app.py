@@ -53,25 +53,25 @@ def logout():
     """
     session_id = request.cookies.get('session_id')
     if session_id:
-        user = AUTH._db._session.query(User).\
-            filter_by(session_id=session_id).first()
+        user = AUTH._db.find_user_by(session_id=session_id)
         if user:
             AUTH.destroy_session(user_id=user.id)
             return redirect(url_for('home'))
         else:
             abort(403)
     else:
-        return "the request doesn't contain session_id\n", 400
+        abort(403)
 
 
 @app.route('/profile')
 def profile():
     """get user profile if session_id exists"""
     session_id = request.cookies.get('session_id')
-    user = AUTH._db._session.query(User).\
-        filter_by(session_id=session_id).first()
-    if user:
-        return jsonify({"email": f"{user.email}"})
+    if session_id:
+        user = AUTH.get_user_from_session_id(session_id)
+        if user:
+            return jsonify({"email": f"{user.email}"})
+        abort(403)
     abort(403)
 
 
