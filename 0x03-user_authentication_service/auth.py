@@ -25,7 +25,7 @@ class Auth:
             new_user = self._db.add_user(email, password)
             return new_user
 
-    def valid_login(self, email="", password=""):
+    def valid_login(self, email: str = "", password: str = "") -> bool:
         current_user = self._db.find_user_by(email=email)
         if current_user:
             if bcrypt.checkpw(password.encode(), current_user.hashed_password):
