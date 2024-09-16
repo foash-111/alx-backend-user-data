@@ -11,11 +11,10 @@ from uuid import uuid4
 class Auth:
     """Auth class to interact with the authentication database.
     """
-
     def __init__(self):
         self._db = DB()
 
-    def register_user(self, email="", password=""):
+    def register_user(self, email: str = "", password: str = "") -> User:
         """store user with hashed password"""
         current_user = self._db._session.query(User).\
             filter_by(email=email).first()
