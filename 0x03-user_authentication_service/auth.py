@@ -38,7 +38,7 @@ class Auth:
         current = self._db.find_user_by(email=email)
         if current:
             current.session_id = _generate_uuid()
-            self._db._session.commit()
+            self._db.update_user(user_id=current.id)
             return current.session_id
         return None
 
