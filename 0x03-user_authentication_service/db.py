@@ -54,10 +54,10 @@ class DB:
                     raise NoResultFound
             raise InvalidRequestError
 
-    def update_user(self, id: int = 0, **kwargs) -> None:
+    def update_user(self, user_id: int = 0, **kwargs) -> None:
         """update user by its matched id"""
         try:
-            user = self.find_user_by(id=id)
+            user = self.find_user_by(id=user_id)
             # print(user.__dict__)
             for key, value in kwargs.items():
                 # if user.__dict__.get(key):
