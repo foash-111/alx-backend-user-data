@@ -54,7 +54,7 @@ class Auth:
     def destroy_session(self, user_id=0):
         cur_user = self._db.find_user_by(id=user_id)
         cur_user.session_id = None
-        self._db._session.commit()
+        self._db.update_user(user_id=cur_user.id)
         return None
 
     def get_reset_password_token(self, email=""):
@@ -63,7 +63,7 @@ class Auth:
             user = self._db.find_user_by(email=email)
             if user:
                 user.reset_token = _generate_uuid()
-                self._db._session.commit()
+                self._db.update_user(user_id=user.id)
                 return user.reset_token
             else:
                 raise ValueError
@@ -73,7 +73,7 @@ class Auth:
         if user:
             user.hashed_password = _hash_password(password)
             user.reset_token = None
-            self._db._session.commit()
+            self._db.update_user(user_id=user.id)
             return None
         else:
             raise ValueError
